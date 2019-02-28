@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using EnvDTE;
 
-namespace QueryVisualStudioProperties
+namespace VisualStudioDTE
 {
     // From https://blogs.msdn.microsoft.com/kirillosenkov/2011/08/10/how-to-get-dte-from-visual-studio-process-id/
     // Slightly modified to find a random Visual Studio instance, instead of a specific one.
