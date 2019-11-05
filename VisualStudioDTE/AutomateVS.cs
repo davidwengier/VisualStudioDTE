@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using EnvDTE;
@@ -12,10 +13,9 @@ namespace VisualStudioDTE
         [DllImport("ole32.dll")]
         private static extern int CreateBindCtx(uint reserved, out IBindCtx ppbc);
 
-        public static DTE FindDTE()
+        public static IEnumerable<DTE> FindDTEs()
         {
             string progId = "!VisualStudio.DTE.16.0:";
-            object runningObject = null;
 
             IBindCtx bindCtx = null;
             IRunningObjectTable rot = null;
@@ -49,8 +49,8 @@ namespace VisualStudioDTE
 
                     if (!string.IsNullOrEmpty(name) && name.StartsWith(progId, StringComparison.Ordinal))
                     {
-                        Marshal.ThrowExceptionForHR(rot.GetObject(runningObjectMoniker, out runningObject));
-                        break;
+                        Marshal.ThrowExceptionForHR(rot.GetObject(runningObjectMoniker, out object runningObject));
+                        yield return (DTE)runningObject;
                     }
                 }
             }
@@ -71,9 +71,6 @@ namespace VisualStudioDTE
                     Marshal.ReleaseComObject(bindCtx);
                 }
             }
-
-            return (DTE)runningObject;
         }
-
     }
 }
